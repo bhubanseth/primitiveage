@@ -1,0 +1,13 @@
+#files being edited
+*~
+protobuf-3.11.4/**
+.git/**
+# make and build files
+*.pb.h
+*.pb.cc
+*.lst
+*.o
+*.eep
+*.lss
+*.map
+*.sym
