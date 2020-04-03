@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package framework;
+
+message Packet {
+  message Header {
+    optional string path = 1;
+  }
+
+  optional Header header = 1;
+
+  // Serialized form of request.
+  optional string payload = 2;
+}
+

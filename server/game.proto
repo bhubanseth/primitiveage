@@ -1,0 +1,97 @@
+syntax = "proto2";
+
+package prim;
+
+message PlayerId {
+  required int32 number = 1;
+  required string display_name = 2;
+}
+
+message Board {
+  message Vertex {
+    required int32 index = 1;
+
+    enum State {
+      EMPTY = 0;
+      SETTLEMENT = 1;
+      CITY = 2;
+    }
+    required State state = 2;
+
+    required bool is_coastal = 3;  
+  }
+  repeated Vertex vertices = 1;
+
+  message Road {
+    required Vertex v1 = 1;
+    required Vertex v2 = 2;
+    optional PlayerId owner_player_id = 3;    
+  }
+  repeated Road unoccupied_road = 2;
+  repeated Road occupied_road = 3;
+
+  required Vertex robber_vertex = 4;
+}
+
+message Card {
+  enum Type {
+    WOOD = 0;
+    BRICK = 1;
+    SHEEP = 2;
+    GRAIN = 3;
+    ORE = 4;
+    VICTORY = 5;
+    KNIGHT = 6;
+    YEAR_OF_PLENTY = 7;
+    ROAD_BUILDER = 8;
+    MONOPOLY = 9;
+  }
+  required Type type = 1;
+
+  optional string image_id = 2;
+}
+
+message Hand {
+  repeated Card card = 1;
+  required int32 num_resource_cards = 2;
+}
+
+message PlayerState {
+  optional PlayerId id = 1;
+  required Hand hand = 2;
+ 
+  // Resource based achievements
+  repeated Board.Vertex owned_settlement = 3;
+  repeated Board.Vertex owned_cities = 4;
+  repeated Board.Road owned_road = 5;
+  
+  // special achievements
+  required int32 max_road_size = 6;
+  required int32 num_knights_played = 7;
+  required int32 num_victory_cards = 8;
+
+  // Win related details.
+  required int32 total_points = 9;
+}
+
+// Holds all information about current state of bank inventory.
+message BankInventory {
+  // Remaining cards
+  repeated Card remaining_card = 1;
+  message PerPlayerRestriction {
+    required int32 remaining_roads = 2;
+    required int32 remaining_settlements = 3;
+    required int32 remaining_cities = 4;
+  }
+  required PerPlayerRestriction player_restriction = 2;
+
+  required int32 winning_points = 3;
+}
+
+message GameState {
+  required Board board = 1;
+
+  repeated PlayerState player_state = 2;
+  
+  required BankInventory bank_inventory = 3;
+}

@@ -12,6 +12,7 @@
 #include <unistd.h> 
 #include <algorithm>
 #include "server.h"
+#include "network.pb.h"
 
 #define MAXLINE 1024
 #define PORT 5000
@@ -19,6 +20,7 @@
 namespace framework {
 
 void BaseServer::RegisterHandler(const std::string& path, const BaseHandlerInterface* handler) {
+  if (path.empty()) return;
   handlers[path] = handler;
 }
 
@@ -72,10 +74,15 @@ bool BaseServer::Start() const {
         bzero(buffer, sizeof(buffer)); 
         printf("Req recd: "); 
         read(connfd, buffer, sizeof(buffer));
-        puts(buffer); 
-        const BaseHandlerInterface* handler = handlers.at("path");
-        const std::string& response = handler->BaseHandle(std::string(buffer));
-        write(connfd, response.c_str(), response.length()); 
+        puts(buffer);
+        Packet req_packet;
+        if (req_packet.ParseFromString(buffer)) {
+          if (handlers.find(req_packet.header().path()) != handlers.end()) {
+            const BaseHandlerInterface* handler = handlers.at(req_packet.header().path());
+            const std::string& response = handler->BaseHandle(std::string(buffer));
+            write(connfd, response.c_str(), response.length()); 
+          }
+        }
         close(connfd); 
         exit(0); 
       } 

@@ -5,9 +5,12 @@ protobuf-3.11.4/**
 # make and build files
 *.pb.h
 *.pb.cc
+*.gch
 *.lst
 *.o
 *.eep
 *.lss
 *.map
 *.sym
+server/primitiveage_server
+server/client
