@@ -7,6 +7,19 @@ message PlayerId {
   required string display_name = 2;
 }
 
+message Block {
+  enum Type {
+    WOOD = 0;
+    BRICK = 1;
+    SHEEP = 2;
+    GRAIN = 3;
+    ORE = 4;
+    DESSERT = 5; 
+  }
+  required Type type = 1;
+  required int32 number = 2;
+}
+
 message Board {
   message Vertex {
     required int32 index = 1;
@@ -29,8 +42,9 @@ message Board {
   }
   repeated Road unoccupied_road = 2;
   repeated Road occupied_road = 3;
+  repeated Block block = 4;
 
-  required Vertex robber_vertex = 4;
+  required Vertex robber_vertex = 5;
 }
 
 message Card {
