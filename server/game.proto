@@ -109,3 +109,9 @@ message GameState {
   
   required BankInventory bank_inventory = 3;
 }
+
+message DiceRoll {
+  required int32 first_dice_number = 1;
+  required int32 second_dice_number = 2;
+}
+
