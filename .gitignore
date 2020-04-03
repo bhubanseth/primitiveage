@@ -11,5 +11,5 @@ protobuf-3.11.4/**
 *.lss
 *.map
 *.sym
-server/framework/primitiveage_server
-server/framework/client
+server/primitiveage_server
+server/client
